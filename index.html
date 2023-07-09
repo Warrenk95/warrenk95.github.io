@@ -142,57 +142,7 @@
 				</footer>
 
 		</div>
-
-		<!DOCTYPE html>
-<html>
-  <head>
-    <script src="https://webchat.botframework.com/embed/Investec-QnA-bot?s=feH2JYAZUqw.zWNTrt3OwhUnXF0ITZYsSfQsByV6a9aIoEiJ26X_8OQ"></script>
-  </head>
-  <body>
-    <h2>Web Chat bot client using Direct Line</h2>
-
-    <div id="webchat" role="main"></div>
-
-    <script>
-
-     // "styleSet" is a set of CSS rules which are generated from "styleOptions"
-     const styleSet = window.WebChat.createStyleSet({
-         bubbleBackground: 'rgba(0, 0, 255, .1)',
-         bubbleFromUserBackground: 'rgba(0, 255, 0, .1)',
-
-         botAvatarImage: '<your bot avatar URL>',
-         botAvatarInitials: 'BF',
-         userAvatarImage: '<your user avatar URL>',
-         userAvatarInitials: 'WC',
-         rootHeight: '100%',
-         rootWidth: '30%'
-      });
-
-      // After generated, you can modify the CSS rules
-      styleSet.textContent = {
-         ...styleSet.textContent,
-         fontFamily: "'Comic Sans MS', 'Arial', sans-serif",
-         fontWeight: 'bold'
-      };
-
-      const res = await fetch('https:<YOUR_TOKEN_SERVER/API>', { method: 'POST' });
-      const { token } = await res.json();
-
-      window.WebChat.renderWebChat(
-        {
-          directLine: window.WebChat.createDirectLine({ token }),
-          userID: 'WebChat_UserId',
-          locale: 'en-US',
-          username: 'Web Chat User',
-          locale: 'en-US',
-          // Passing 'styleSet' when rendering Web Chat
-          styleSet
-        },
-        document.getElementById('webchat')
-      );
-    </script>
-  </body>
-</html>
+		
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.scrolly.min.js"></script>
