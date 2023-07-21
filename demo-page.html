@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Custom Vision Showcase</title>
+    <style>
+        /* Center the content on the page */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: black;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Style for displaying confidence score on the image */
+        .confidence {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: red;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        /* Style for the image container */
+        .image-container {
+            position: relative;
+        }
+
+        /* Style for the disclaimer */
+        .disclaimer {
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+    <script>
+        // Function to handle file upload and make API request
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            const apiUrl = 'https://southcentralus.api.cognitive.microsoft.com/customvision/v3.0/Prediction/40f71de7-7024-4b20-acd1-fd4bfcb1a339/classify/iterations/Iteration3/image'; 
+            const apiKey = 'b0faa2704120430d9d5737d7780cb02e'; 
+
+            // Prepare the API request
+            const formData = new FormData();
+            formData.append('image', file);
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Prediction-Key': apiKey,
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the API response
+                const predictionResult = data.predictions[0];
+                const tagName = predictionResult.tagName;
+                const probability = predictionResult.probability;
+
+                // Display the result on the page
+                const imagePreview = document.getElementById('image-preview');
+                imagePreview.src = URL.createObjectURL(file);
+
+                const imageContainer = document.querySelector('.image-container');
+
+                // Check if probability is high (greater than 0.99) and display high confidence message
+                if (probability > 0.99) {
+                    const highConfidenceElement = document.createElement('div');
+                    highConfidenceElement.className = 'confidence';
+                    highConfidenceElement.style.backgroundColor = 'green';
+                    highConfidenceElement.innerText = 'High confidence: Snake identified correctly';
+                    imageContainer.appendChild(highConfidenceElement);
+                } else {
+                    const lowConfidenceElement = document.createElement('div');
+                    lowConfidenceElement.className = 'confidence';
+                    lowConfidenceElement.style.backgroundColor = 'orange';
+                    lowConfidenceElement.innerText = 'Low confidence: Snake may be incorrectly identified';
+                    imageContainer.appendChild(lowConfidenceElement);
+                }
+
+                // Display the original confidence score
+                const confidenceElement = document.createElement('div');
+                confidenceElement.className = 'confidence';
+                confidenceElement.innerText = `Predicted: ${tagName}, Confidence: ${probability}`;
+                imageContainer.appendChild(confidenceElement);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error occurred during prediction');
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="image-container">
+        <h1>Custom Vision Showcase</h1>
+        <input type="file" accept="image/*" onchange="handleFileUpload(event)">
+        <div>
+            <img id="image-preview" alt="Image Preview" style="max-width: 500px;">
+        </div>
+    </div>
+    <div class="disclaimer">
+        <p>Disclaimer: Errors and omissions are expected. This is just an indication. A confidence score higher than 0.99 indicates a high possibility that the snake is correctly identified.</p>
+    </div>
+</body>
+</html>
