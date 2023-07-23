@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
+
 <html>
 <head>
     <title>Custom Vision Showcase</title>
@@ -18,7 +19,7 @@
 
         /* Style for displaying confidence score on the image */
         .confidence {
-            position: absolute;
+            position: relative;
             top: 10px;
             right: 10px;
             background-color: red;
@@ -37,6 +38,22 @@
             margin-top: 20px;
             font-size: 14px;
             text-align: center;
+        }
+
+        /* Style for the capture button */
+        .capture-button {
+            margin-top: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Style for hiding the file input element */
+        .hide-file-input {
+            display: none;
         }
     </style>
     <script>
@@ -70,6 +87,12 @@
 
                 const imageContainer = document.querySelector('.image-container');
 
+                // Display the original confidence score
+                const confidenceElement = document.createElement('div');
+                confidenceElement.className = 'confidence';
+                confidenceElement.innerText = `Predicted: ${tagName}, Confidence: ${probability}`;
+                imageContainer.appendChild(confidenceElement);
+
                 // Check if probability is high (greater than 0.99) and display high confidence message
                 if (probability > 0.99) {
                     const highConfidenceElement = document.createElement('div');
@@ -84,16 +107,21 @@
                     lowConfidenceElement.innerText = 'Low confidence: Snake may be incorrectly identified';
                     imageContainer.appendChild(lowConfidenceElement);
                 }
-
-                // Display the original confidence score
-                const confidenceElement = document.createElement('div');
-                confidenceElement.className = 'confidence';
-                confidenceElement.innerText = `Predicted: ${tagName}, Confidence: ${probability}`;
-                imageContainer.appendChild(confidenceElement);
             })
             .catch(error => {
                 console.error('Error:', error);
                 alert('Error occurred during prediction');
+            });
+        }
+
+        // Function to handle image capture
+        function captureImage() {
+            const captureButton = document.getElementById('capture-button');
+            const fileInput = document.getElementById('file-input');
+
+            // Trigger the file input click event when capture button is clicked
+            captureButton.addEventListener('click', () => {
+                fileInput.click();
             });
         }
     </script>
@@ -101,13 +129,18 @@
 <body>
     <div class="image-container">
         <h1>Custom Vision Showcase</h1>
-        <input type="file" accept="image/*" onchange="handleFileUpload(event)">
+        <input type="file" id="file-input" accept="image/*" class="hide-file-input" onchange="handleFileUpload(event)">
+        <button id="capture-button" class="capture-button">Capture Now</button>
         <div>
             <img id="image-preview" alt="Image Preview" style="max-width: 500px;">
         </div>
     </div>
     <div class="disclaimer">
-        <p>Disclaimer: Errors and omissions are expected. This is just an indication. A confidence score higher than 0.99 indicates a high possibility that the snake is correctly identified.</p>
+        <p>Disclaimer: Anticipate errors and omissions in the snake classifier as it serves as an indication. A confidence score exceeding 0.99 suggests a high probability of accurate snake identification, but please remain cautious and vigilant.</p>
     </div>
+    <script>
+        // Call the captureImage function to enable image capture
+        captureImage();
+    </script>
 </body>
 </html>
