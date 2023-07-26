@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <title>Custom Vision Showcase</title>
+    <title>AI Powered Snake Identifier created by Warren Kasongo (V1.2)</title>
     <style>
         /* Center the content on the page */
         body {
@@ -20,8 +20,8 @@
         /* Style for displaying confidence score on the image */
         .confidence {
             position: relative;
-            top: 10px;
-            right: 10px;
+            top: 30px;
+            right: 30px;
             background-color: red;
             color: white;
             padding: 5px;
@@ -51,14 +51,27 @@
             cursor: pointer;
         }
 
-        /* Style for hiding the file input element */
-        .hide-file-input {
-            display: none;
+        /* Snake graphics styles */
+        .snake-container {
+            display: flex;
+            justify-content: space-around;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .snake-img {
+            max-height: 70%;
+            max-width: 50%;
+            opacity: 0.8;
         }
     </style>
     <script>
-        // Function to handle file upload and make API request
-        function handleFileUpload(event) {
+         // Function to handle file upload and make API request
+         function handleFileUpload(event) {
             const file = event.target.files[0];
             const apiUrl = 'https://southcentralus.api.cognitive.microsoft.com/customvision/v3.0/Prediction/40f71de7-7024-4b20-acd1-fd4bfcb1a339/classify/iterations/Iteration3/image'; 
             const apiKey = 'b0faa2704120430d9d5737d7780cb02e'; 
@@ -94,7 +107,7 @@
                 imageContainer.appendChild(confidenceElement);
 
                 // Check if probability is high (greater than 0.99) and display high confidence message
-                if (probability > 0.99) {
+                if (probability > 0.90) {
                     const highConfidenceElement = document.createElement('div');
                     highConfidenceElement.className = 'confidence';
                     highConfidenceElement.style.backgroundColor = 'green';
@@ -127,16 +140,21 @@
     </script>
 </head>
 <body>
+    <div class="snake-container">
+        <img src="snake1.png" alt="Snake Graphic" class="snake-img">
+        <img src="snake2.png" alt="Snake Graphic" class="snake-img">
+    </div>
+
     <div class="image-container">
-        <h1>Custom Vision Showcase</h1>
+        <h1>AI Powered Snake Classifier by Warren.K (V1.2)</h1>
         <input type="file" id="file-input" accept="image/*" class="hide-file-input" onchange="handleFileUpload(event)">
         <button id="capture-button" class="capture-button">Capture Now</button>
         <div>
-            <img id="image-preview" alt="Image Preview" style="max-width: 500px;">
+            <img id="image-preview" alt="" style="max-width: 500px;">
         </div>
     </div>
     <div class="disclaimer">
-        <p>Disclaimer: Anticipate errors and omissions in the snake classifier as it serves as an indication. A confidence score exceeding 0.99 suggests a high probability of accurate snake identification, but please remain cautious and vigilant.</p>
+        <p>Disclaimer: Errors and omissions are expected. This is just an indication. A confidence score higher than 0.99 indicates a high possibility that the snake is correctly identified.</p>
     </div>
     <script>
         // Call the captureImage function to enable image capture
